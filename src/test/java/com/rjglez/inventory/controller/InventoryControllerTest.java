@@ -30,28 +30,43 @@ public class InventoryControllerTest {
     }
 
     @Test
-    void getInventoryWhenThereIsNotOrProductIdDoesNotExist() {
+    void checkStockWhenProductIdDoesNotExist() {
+        // GIVEN
+        UUID productId = UUID.randomUUID();
+
+        when(inventoryService.getStock(productId)).thenReturn(null);
+
+        // WHEN
+        ResponseEntity<InventoryResponse> response = inventoryController.checkStock(productId);
+
+        // THEN
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatusCode.valueOf(404));
+        verify(inventoryService, times(1)).getStock(productId);
+    }
+
+    @Test
+    void checkStockWhenProductIdExists() {
         // GIVEN
         UUID productId = UUID.randomUUID();
 
         InventoryResponse inventoryResponse = InventoryResponse.builder()
                 .productId(productId)
-                .quantity(0)
+                .quantity(25)
                 .build();
 
-        when(inventoryService.getInventory(productId)).thenReturn(inventoryResponse);
+        when(inventoryService.getStock(productId)).thenReturn(inventoryResponse);
 
         // WHEN
-        ResponseEntity<InventoryResponse> response = inventoryController.getInventory(productId);
+        ResponseEntity<InventoryResponse> response = inventoryController.checkStock(productId);
 
         // THEN
         assertThat(response.getStatusCode()).isEqualTo(HttpStatusCode.valueOf(200));
         assertThat(response.getBody()).isEqualTo(inventoryResponse);
-        verify(inventoryService, times(1)).getInventory(productId);
+        verify(inventoryService, times(1)).getStock(productId);
     }
 
     @Test
-    void updateInventory() {
+    void updateInventoryWhenProductIdExists() {
         // GIVEN
         UUID productId = UUID.randomUUID();
         int quantity = 35;
@@ -69,6 +84,22 @@ public class InventoryControllerTest {
         // THEN
         assertThat(response.getStatusCode()).isEqualTo(HttpStatusCode.valueOf(200));
         assertThat(response.getBody()).isEqualTo(inventoryResponse);
+        verify(inventoryService, times(1)).updateInventory(productId, quantity);
+    }
+
+    @Test
+    void updateInventoryWhenProductIdDoesNotExist() {
+        // GIVEN
+        UUID productId = UUID.randomUUID();
+        int quantity = 35;
+
+        when(inventoryService.updateInventory(productId, quantity)).thenReturn(null);
+
+        // WHEN
+        ResponseEntity<InventoryResponse> response = inventoryController.updateInventory(productId, quantity);
+
+        // THEN
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatusCode.valueOf(404));
         verify(inventoryService, times(1)).updateInventory(productId, quantity);
     }
 }
