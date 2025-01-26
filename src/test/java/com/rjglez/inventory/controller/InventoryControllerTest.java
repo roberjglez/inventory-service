@@ -76,15 +76,15 @@ public class InventoryControllerTest {
                 .quantity(quantity)
                 .build();
 
-        when(inventoryService.updateInventory(productId, quantity)).thenReturn(inventoryResponse);
+        when(inventoryService.reduceStock(productId, quantity)).thenReturn(inventoryResponse);
 
         // WHEN
-        ResponseEntity<InventoryResponse> response = inventoryController.updateInventory(productId, quantity);
+        ResponseEntity<InventoryResponse> response = inventoryController.reduceStock(productId, quantity);
 
         // THEN
         assertThat(response.getStatusCode()).isEqualTo(HttpStatusCode.valueOf(200));
         assertThat(response.getBody()).isEqualTo(inventoryResponse);
-        verify(inventoryService, times(1)).updateInventory(productId, quantity);
+        verify(inventoryService, times(1)).reduceStock(productId, quantity);
     }
 
     @Test
@@ -93,13 +93,13 @@ public class InventoryControllerTest {
         UUID productId = UUID.randomUUID();
         int quantity = 35;
 
-        when(inventoryService.updateInventory(productId, quantity)).thenReturn(null);
+        when(inventoryService.reduceStock(productId, quantity)).thenReturn(null);
 
         // WHEN
-        ResponseEntity<InventoryResponse> response = inventoryController.updateInventory(productId, quantity);
+        ResponseEntity<InventoryResponse> response = inventoryController.reduceStock(productId, quantity);
 
         // THEN
         assertThat(response.getStatusCode()).isEqualTo(HttpStatusCode.valueOf(404));
-        verify(inventoryService, times(1)).updateInventory(productId, quantity);
+        verify(inventoryService, times(1)).reduceStock(productId, quantity);
     }
 }

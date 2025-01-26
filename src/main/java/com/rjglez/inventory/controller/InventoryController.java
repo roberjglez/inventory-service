@@ -28,9 +28,9 @@ public class InventoryController {
         return ResponseEntity.ok(response);
     }
 
-    @PutMapping(value = "/{productId}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<InventoryResponse> updateInventory(@PathVariable UUID productId, @RequestBody int quantity) {
-        InventoryResponse response = inventoryService.updateInventory(productId, quantity);
+    @PutMapping(value = "/reduce/{productId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<InventoryResponse> reduceStock(@PathVariable UUID productId, @RequestParam int quantity) {
+        InventoryResponse response = inventoryService.reduceStock(productId, quantity);
         if (Objects.isNull(response)) {
             return ResponseEntity.notFound().build();
         }

@@ -44,21 +44,26 @@ public class InventoryService {
                 .build();
     }
 
-    public InventoryResponse updateInventory(UUID productId, int quantity) {
+    public InventoryResponse reduceStock(UUID productId, int quantity) {
         InventoryProduct product = inventory.get(productId);
 
         if (Objects.isNull(product)) {
             return null;
         }
 
+        int newStock = product.quantity() - quantity;
+        if (newStock < 0) {
+            throw new IllegalArgumentException("Insufficient stock for product: " + productId);
+        }
+
         inventory.put(productId, InventoryProduct.builder()
                 .id(productId)
                 .name(product.name())
-                .quantity(quantity)
+                .quantity(newStock)
                 .build());
         return InventoryResponse.builder()
                 .productId(productId)
-                .quantity(quantity)
+                .quantity(newStock)
                 .build();
     }
 }
