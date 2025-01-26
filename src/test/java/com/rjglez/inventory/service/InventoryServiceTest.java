@@ -2,6 +2,7 @@ package com.rjglez.inventory.service;
 
 import com.rjglez.inventory.controller.response.InventoryResponse;
 import org.junit.jupiter.api.Test;
+import org.springframework.test.util.ReflectionTestUtils;
 
 import java.util.UUID;
 
@@ -72,6 +73,8 @@ public class InventoryServiceTest {
         // GIVEN
         UUID productId = UUID.fromString("063ded62-99b7-4323-ab17-ec5933691c7c");
         int quantity = 4;
+
+        ReflectionTestUtils.setField(inventoryService, "insufficientStockWarning", "WARNING: Stock is insufficient for product {productId}");
 
         // WHEN
         IllegalArgumentException exception = assertThrows(

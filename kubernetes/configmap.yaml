@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: inventory-config
+  namespace: default
+data:
+  insufficient-stock-warning: "WARNING: Stock is insufficient for product {productId}"
