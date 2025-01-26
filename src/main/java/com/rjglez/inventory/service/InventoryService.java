@@ -38,16 +38,16 @@ public class InventoryService {
                 .build());
     }
 
-    public InventoryResponse getStock(UUID productId) {
-        InventoryProduct product = inventory.get(productId);
+    public InventoryResponse getStock(String productId) {
+        InventoryProduct product = inventory.get(UUID.fromString(productId));
         return Objects.isNull(product) ? null : InventoryResponse.builder()
                 .productId(product.id())
                 .quantity(product.quantity())
                 .build();
     }
 
-    public InventoryResponse reduceStock(UUID productId, int quantity) {
-        InventoryProduct product = inventory.get(productId);
+    public InventoryResponse reduceStock(String productId, int quantity) {
+        InventoryProduct product = inventory.get(UUID.fromString(productId));
 
         if (Objects.isNull(product)) {
             return null;
@@ -59,13 +59,13 @@ public class InventoryService {
             throw new IllegalArgumentException("Insufficient stock for product: " + productId);
         }
 
-        inventory.put(productId, InventoryProduct.builder()
-                .id(productId)
+        inventory.put(UUID.fromString(productId), InventoryProduct.builder()
+                .id(UUID.fromString(productId))
                 .name(product.name())
                 .quantity(newStock)
                 .build());
         return InventoryResponse.builder()
-                .productId(productId)
+                .productId(UUID.fromString(productId))
                 .quantity(newStock)
                 .build();
     }

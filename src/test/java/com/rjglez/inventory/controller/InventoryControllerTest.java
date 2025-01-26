@@ -32,7 +32,7 @@ public class InventoryControllerTest {
     @Test
     void checkStockWhenProductIdDoesNotExist() {
         // GIVEN
-        UUID productId = UUID.randomUUID();
+        String productId = UUID.randomUUID().toString();
 
         when(inventoryService.getStock(productId)).thenReturn(null);
 
@@ -47,10 +47,10 @@ public class InventoryControllerTest {
     @Test
     void checkStockWhenProductIdExists() {
         // GIVEN
-        UUID productId = UUID.randomUUID();
+        String productId = UUID.randomUUID().toString();
 
         InventoryResponse inventoryResponse = InventoryResponse.builder()
-                .productId(productId)
+                .productId(UUID.fromString(productId))
                 .quantity(25)
                 .build();
 
@@ -68,11 +68,11 @@ public class InventoryControllerTest {
     @Test
     void updateInventoryWhenProductIdExists() {
         // GIVEN
-        UUID productId = UUID.randomUUID();
+        String productId = UUID.randomUUID().toString();
         int quantity = 35;
 
         InventoryResponse inventoryResponse = InventoryResponse.builder()
-                .productId(productId)
+                .productId(UUID.fromString(productId))
                 .quantity(quantity)
                 .build();
 
@@ -90,7 +90,7 @@ public class InventoryControllerTest {
     @Test
     void updateInventoryWhenProductIdDoesNotExist() {
         // GIVEN
-        UUID productId = UUID.randomUUID();
+        String productId = UUID.randomUUID().toString();
         int quantity = 35;
 
         when(inventoryService.reduceStock(productId, quantity)).thenReturn(null);

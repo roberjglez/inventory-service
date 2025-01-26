@@ -10,7 +10,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Objects;
-import java.util.UUID;
 
 @AllArgsConstructor
 @RestController
@@ -22,7 +21,7 @@ public class InventoryController {
 
     @Operation(description = "Returns the available stock for a given product ID")
     @GetMapping("/check/{productId}")
-    public ResponseEntity<InventoryResponse> checkStock(@PathVariable UUID productId) {
+    public ResponseEntity<InventoryResponse> checkStock(@PathVariable String productId) {
         InventoryResponse response = inventoryService.getStock(productId);
 
         if (Objects.isNull(response)) {
@@ -34,7 +33,7 @@ public class InventoryController {
 
     @Operation(description = "Reduces the stock for a given product ID and quantity")
     @PutMapping(value = "/reduce/{productId}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<InventoryResponse> reduceStock(@PathVariable UUID productId, @RequestParam int quantity) {
+    public ResponseEntity<InventoryResponse> reduceStock(@PathVariable String productId, @RequestParam int quantity) {
         InventoryResponse response = inventoryService.reduceStock(productId, quantity);
         if (Objects.isNull(response)) {
             return ResponseEntity.notFound().build();

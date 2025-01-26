@@ -16,7 +16,7 @@ public class InventoryServiceTest {
     @Test
     void getStockWhenProductIdExists() {
         // GIVEN
-        UUID productId = UUID.fromString("063ded62-99b7-4323-ab17-ec5933691c7c");
+        String productId = "063ded62-99b7-4323-ab17-ec5933691c7c";
         int quantity = 2;
 
         // WHEN
@@ -24,14 +24,14 @@ public class InventoryServiceTest {
 
         // THEN
         assertThat(response).isNotNull();
-        assertThat(response.productId()).isEqualTo(productId);
+        assertThat(response.productId()).isEqualTo(UUID.fromString(productId));
         assertThat(response.quantity()).isEqualTo(quantity);
     }
 
     @Test
     void getStockWhenProductIdDoesNotExist() {
         // GIVEN
-        UUID productId = UUID.randomUUID();
+        String productId = UUID.randomUUID().toString();
 
         // WHEN
         InventoryResponse response = inventoryService.getStock(productId);
@@ -43,7 +43,7 @@ public class InventoryServiceTest {
     @Test
     void reduceStockWhenProductExists() {
         // GIVEN
-        UUID productId = UUID.fromString("706ba114-a11e-440a-aa28-d2e68a1b7561");
+        String productId = "706ba114-a11e-440a-aa28-d2e68a1b7561";
         int quantity = 4;
 
         // WHEN
@@ -51,14 +51,14 @@ public class InventoryServiceTest {
 
         // THEN
         assertThat(response).isNotNull();
-        assertThat(response.productId()).isEqualTo(productId);
+        assertThat(response.productId()).isEqualTo(UUID.fromString(productId));
         assertThat(response.quantity()).isEqualTo(67);
     }
 
     @Test
     void reduceStockWhenProductDoesNotExist() {
         // GIVEN
-        UUID productId = UUID.randomUUID();
+        String productId = UUID.randomUUID().toString();
         int quantity = 4;
 
         // WHEN
@@ -71,7 +71,7 @@ public class InventoryServiceTest {
     @Test
     void reduceStockWhenThereIsNoSufficientStock() {
         // GIVEN
-        UUID productId = UUID.fromString("063ded62-99b7-4323-ab17-ec5933691c7c");
+        String productId = "063ded62-99b7-4323-ab17-ec5933691c7c";
         int quantity = 4;
 
         ReflectionTestUtils.setField(inventoryService, "insufficientStockWarning", "WARNING: Stock is insufficient for product {productId}");
