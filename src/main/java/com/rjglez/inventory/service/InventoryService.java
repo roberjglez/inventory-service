@@ -16,7 +16,8 @@ public class InventoryService {
     private final String insufficientStockWarning;
 
     InventoryService() {
-        this.insufficientStockWarning = System.getenv("INSUFFICIENT_STOCK_WARNING");
+        this.insufficientStockWarning = Objects.isNull(System.getenv("INSUFFICIENT_STOCK_WARNING")) ?
+                "WARNING: Stock is insufficient for product {productId}" : System.getenv("INSUFFICIENT_STOCK_WARNING");
         UUID firstInventoryProductId = UUID.fromString("8ef0a5c8-10b8-497b-83bb-2d012f6b3d03");
         UUID secondInventoryProductId = UUID.fromString("706ba114-a11e-440a-aa28-d2e68a1b7561");
         UUID thirdInventoryProductId = UUID.fromString("063ded62-99b7-4323-ab17-ec5933691c7c");
@@ -55,7 +56,7 @@ public class InventoryService {
 
         int newStock = product.quantity() - quantity;
         if (newStock < 0) {
-            System.out.println(insufficientStockWarning.replace("{productId}", productId.toString()));
+            System.out.println(insufficientStockWarning.replace("{productId}", productId));
             throw new IllegalArgumentException("Insufficient stock for product: " + productId);
         }
 
